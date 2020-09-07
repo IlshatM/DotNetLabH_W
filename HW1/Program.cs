@@ -6,7 +6,7 @@ namespace HW1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(Calculator.Calculate("1    + 2 * 5   / 3 + 6     / 4 * 2"));
         }
     }
 }
