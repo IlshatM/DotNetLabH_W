@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HW1
 {
-    static class Calculator
+    public static class Calculator
     {
         public static double Calculate(string s)
         {
