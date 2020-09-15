@@ -2,6 +2,6 @@ language: csharp
 solution: HW1.sln
 sudo: false
 script:
-  - dotnet test -c Debug --no-build CalculatorTests/CalculatorTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+  - dotnet CalculatorTests -c Debug --no-build CalculatorTests/CalculatorTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 after_success: 
   -bash < (curl -s https://codecov.io/bash)
