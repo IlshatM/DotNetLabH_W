@@ -1,5 +1,7 @@
 language: csharp
 solution: HW1.sln
 sudo: false
+script:
+  - dotnet test -c Release --no-build test/test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 after_success: 
   -bash < (curl -s https://codecov.io/bash)
