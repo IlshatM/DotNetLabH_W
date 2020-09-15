@@ -1,0 +1,3 @@
+language: C#
+script:
+  -/home/runner/work/DotNetLabH_W/DotNetLabH_W/CalculatorTests/bin/Debug/netcoreapp3.1/CalculatorTests.dll
