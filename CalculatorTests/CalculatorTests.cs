@@ -7,6 +7,12 @@ namespace CalculatorTests
     public class CalculatorTestCase
     {
         [TestCase]
+        public void Program_Main_Res_Return4()
+        {
+            Program.Main(new string[] { });
+            Assert.AreEqual(4, Program.Res);
+        }
+        [TestCase]
         public void Calculate_Plus_2_3_Returned5()
         {
             Assert.AreEqual(5, Calculator.Calculate("2+3"));

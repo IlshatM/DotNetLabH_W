@@ -1,11 +1,14 @@
 ﻿using System;
 namespace HW1
 {
-    class Program
+    
+    public class Program
     {
-        static void Main(string[] args) 
+        public static double Res;
+        public static void Main(string[] args)
         {
-            Console.WriteLine(Calculator.Calculate("2+3-1"));
+            Res = Calculator.Calculate("2+3-1");
+            Console.WriteLine(Res);
         }
     }
 }
