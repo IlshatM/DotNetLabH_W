@@ -1,7 +1,4 @@
 language: csharp
-solution: HW1.sln
-sudo: false
+
 script:
-  - dotnet CalculatorTests -c Debug --no-build CalculatorTests/CalculatorTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-after_success: 
-  -bash < (curl -s https://codecov.io/bash)
+  - dotnet build HW1.sln -c Release
