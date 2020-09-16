@@ -1,4 +1,14 @@
 language: csharp
 
+sudo: false
+
+env:
+  global:
+    - DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
 script:
   - dotnet build HW1.sln -c Release
+  - dotnet test -c Release --no-build CalculatorTests/CalculatorTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+
+after_script:
+  - bash <(curl -s https://codecov.io/bash)
