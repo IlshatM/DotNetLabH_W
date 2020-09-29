@@ -2,6 +2,7 @@ module Tests
 
 open System
 open HW2
+open HW2.Calculator
 open Xunit
 
 [<Fact>]
@@ -29,3 +30,11 @@ let ``NoneWhenNoSecondNumber`` () =
 [<Fact>]
 let ``NoneWhenDevideBy0`` () =
     Assert.Equal(None,Calculator.Dev(2.0,0.0))
+[<Fact>]
+let ``MayBeNoneRetuen`` () =
+    let maybe = new MaybeBuilder()
+    let a = maybe{
+                  let! a1 = Calculator.Dev(2.0,0.0)
+                  return a1
+                 }
+    Assert.Equal(None,a)
