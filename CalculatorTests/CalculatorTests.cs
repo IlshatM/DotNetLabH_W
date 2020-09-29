@@ -1,6 +1,5 @@
 using HW1;
 using NUnit.Framework;
-
 namespace CalculatorTests
 {
     [TestFixture]
