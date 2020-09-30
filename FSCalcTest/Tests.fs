@@ -30,6 +30,8 @@ let ``NoneWhenNoSecondNumber`` () =
 [<Fact>]
 let ``NoneWhenDevideBy0`` () =
     Assert.Equal(None,Calculator.Dev(2.0,0.0))
+    
+    
 [<Fact>]
 let ``MayBeNoneRetuen`` () =
     let maybe = new MaybeBuilder()
