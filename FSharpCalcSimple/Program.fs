@@ -43,9 +43,6 @@
             else if s.Contains "*" then Some('*')
             else if s.Contains "/" then Some('/')
             else None
-            
-        let GetNumber(s:string):double = 
-            s|>double
         let Dev(a:double, b:double) =
             if b<>0.0 then
                 Some(a/b)
@@ -63,7 +60,7 @@
                 {
                 let! pure_str = s |> ClearString |> CheckValid
                 let! act = pure_str |> GetAction
-                let! double_mas = Split(pure_str,act)|>List.map(fun x->GetNumber(x))|>Some
+                let! double_mas = Split(pure_str,act)|>List.map(fun x->x|>double)|>Some
                 let! res = calc(double_mas, act)
                 return res
                 }
