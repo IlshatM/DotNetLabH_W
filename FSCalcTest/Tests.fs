@@ -8,7 +8,9 @@ open Xunit
 
 
 
-
+[<Fact>]
+let ``2+sometext3 -> 2+3`` () =
+    Assert.Equal("2+3",ClearString("2+sometext3"))
 [<Fact>]
 let ``2+3=5`` () =
     Assert.Equal(5.0,Calculator.Calculate("2+3").Value)
@@ -34,3 +36,8 @@ let ``NoneWhenNoSecondNumber`` () =
 [<Fact>]
 let ``NoneWhenDevideBy0`` () =
     Assert.Equal(None,Calculator.Dev(2.0,0.0))
+    
+[<Fact>]
+let ``Convert string to number`` () =
+    Assert.Equal(2.0,Calculator.GetNumber("2"))
+

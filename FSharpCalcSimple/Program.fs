@@ -1,6 +1,7 @@
 ﻿namespace HW2
 
     open System.Diagnostics.CodeAnalysis
+    open System.Linq.Expressions
 
     module Calculator =
         open System
@@ -29,6 +30,9 @@
 
         let Split (str:string, ch:char) =
             str.Split([|ch|], StringSplitOptions.None) |> Array.toList
+            
+        let GetNumber(x) =
+            x|>double
             
         let CheckValid(str:string) =
             let a = str.Split([|'+';'-';'*';'/'|], StringSplitOptions.None) |> Array.toList
@@ -60,7 +64,7 @@
                 {
                 let! pure_str = s |> ClearString |> CheckValid
                 let! act = pure_str |> GetAction
-                let! double_mas = Split(pure_str,act)|>List.map(fun x->x|>double)|>Some
+                let! double_mas = Split(pure_str,act)|>List.map(fun x->x|>GetNumber)|>Some
                 let! res = calc(double_mas, act)
                 return res
                 }
