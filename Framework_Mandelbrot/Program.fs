@@ -55,6 +55,7 @@ let picBox = new PictureBox()
 picBox.Image <- image
 picBox.Size <- (Size(400,400))
 temp.Controls.Add(picBox)
+let scaled_pic = Mandelbrot.createImage(400,400,1000,100.0,-0.7,0.28)
 let mutable scale = 0.0
 let mutable speed = 1.0
 let mutable accuracy_scale = 1.0
@@ -67,7 +68,7 @@ timer.Tick.Add <| fun _ ->
     accuracy_scale<-accuracy_scale+3.0
     if scale >= 100.0 then
         timer.Stop()
-        image <- Mandelbrot.createImage(400,400,1000,100.0,-0.7,0.28)
+        image <- scaled_pic
         picBox.Image<-image
 
 
