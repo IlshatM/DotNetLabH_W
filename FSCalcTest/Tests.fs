@@ -40,4 +40,8 @@ let ``NoneWhenDevideBy0`` () =
 [<Fact>]
 let ``Convert string to number`` () =
     Assert.Equal(2.0,Calculator.GetNumber("2"))
+    
+[<Fact>]
+let ``Convert invalid string to number`` () =
+    Assert.Throws<FormatException>(fun()->GetNumber("A")|>ignore)|>ignore
 
