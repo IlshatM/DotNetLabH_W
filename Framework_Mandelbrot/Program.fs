@@ -48,7 +48,7 @@ module Mandelbrot =
 
 
 [<STAThread>]
-let mutable image = Mandelbrot.createImage(400,400,20,1.0,-1.0,0.0)
+let mutable image = Mandelbrot.createImage(400,400,20,1.0,-0.7,0.28)
 let temp = new Form()
 temp.Size<-Size(400,400)
 let picBox = new PictureBox()
@@ -60,11 +60,11 @@ let mutable speed = 1.0
 let mutable accuracy_scale = 1.0
 let timer = new System.Windows.Forms.Timer(Interval = 10)
 timer.Tick.Add <| fun _ ->
-    image <- Mandelbrot.createImage(400,400,20+int accuracy_scale,(1.0+scale),-0.728,0.2885)
+    image <- Mandelbrot.createImage(400,400,20+int accuracy_scale,(1.0+scale),-0.7,0.28)
     picBox.Image<-image
     scale<-scale+speed
     if int scale % 10 = 0 then speed<-speed*2.0
-    accuracy_scale<-accuracy_scale+1.0
+    accuracy_scale<-accuracy_scale+2.0
 
 
 timer.Start()
