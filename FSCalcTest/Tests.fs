@@ -44,4 +44,7 @@ let ``Convert string to number`` () =
 [<Fact>]
 let ``Convert invalid string to number`` () =
     Assert.Throws<FormatException>(fun()->GetNumber("A")|>ignore)|>ignore
+[<Fact>]
+let ``Convert string with not completed part to number`` () =
+    Assert.Equal(2.3,Calculator.GetNumber("2.3"))
 

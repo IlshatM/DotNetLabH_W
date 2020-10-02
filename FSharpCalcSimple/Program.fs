@@ -74,5 +74,5 @@
         [<EntryPoint>]
         
         let main argv = 
-            Calculator.Print(Calculator.Calculate("2/3"))
+            Calculator.Print(Calculator.Calculate("2+3"))
             0
