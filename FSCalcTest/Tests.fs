@@ -37,14 +37,4 @@ let ``NoneWhenNoSecondNumber`` () =
 let ``NoneWhenDevideBy0`` () =
     Assert.Equal(None,Calculator.Dev(2.0,0.0))
     
-[<Fact>]
-let ``Convert string to number`` () =
-    Assert.Equal(2.0,Calculator.GetNumber("2"))
-    
-[<Fact>]
-let ``Convert invalid string to number`` () =
-    Assert.Throws<FormatException>(fun()->GetNumber("A")|>ignore)|>ignore
-[<Fact>]
-let ``Convert string with not completed part to number`` () =
-    Assert.Equal(2.3,Calculator.GetNumber("2.3"))
 

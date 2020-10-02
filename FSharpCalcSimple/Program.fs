@@ -30,7 +30,8 @@
 
         let Split (str:string, ch:char) =
             str.Split([|ch|], StringSplitOptions.None) |> Array.toList
-            
+         
+        [<ExcludeFromCodeCoverage>]      
         let GetNumber(x) =
             x|>double
             
