@@ -3,7 +3,7 @@ language: csharp
 dotnet: 3.1
 
 script:
-  - dotnet build -c Release FSharpCalcSimple/FSharpCalcSimple.csproj
+  - dotnet build -c Release FSharpCalcSimple/FSharpCalcSimple.fsproj
   - dotnet build -c Release HW1/HW1.csproj
   - dotnet test -c Release --no-build CalculatorTests/CalculatorTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
   - dotnet test -c Release --no-build FSCalcTest/FSCalcTest.fsproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
