@@ -34,4 +34,6 @@ let ``NoneWhenNoSecondNumber`` () =
 [<Fact>]
 let ``NoneWhenDevideBy0`` () =
     Assert.Equal(None,Calculator.Dev(2.0,0.0))
-    
+[<Fact>]
+let ``"2"->2.0`` () =
+    Assert.Equal(2.0,Calculator.GetNumber("2"))
