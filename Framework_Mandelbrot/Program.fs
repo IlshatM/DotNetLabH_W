@@ -64,7 +64,11 @@ timer.Tick.Add <| fun _ ->
     picBox.Image<-image
     scale<-scale+speed
     if int scale % 10 = 0 then speed<-speed*2.0
-    accuracy_scale<-accuracy_scale+2.0
+    accuracy_scale<-accuracy_scale+3.0
+    if scale >= 100.0 then
+        timer.Stop()
+        image <- Mandelbrot.createImage(400,400,1000,100.0,-0.7,0.28)
+        picBox.Image<-image
 
 
 timer.Start()
