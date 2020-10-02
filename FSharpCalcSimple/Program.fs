@@ -1,7 +1,10 @@
 ﻿namespace HW2
 
+    open System.Diagnostics.CodeAnalysis
+
     module Calculator =
         open System
+        [<ExcludeFromCodeCoverage>]
         type MaybeBuilder() =
 
             member this.Bind(x, f) = 
@@ -13,6 +16,7 @@
                 Some x
            
         let maybe = new MaybeBuilder()
+        [<ExcludeFromCodeCoverage>]
         let Print(a:double option):unit =
              if a = None then printfn "Invalid input"
              else printfn "%f" (a.Value)
@@ -63,8 +67,11 @@
                 let! res = calc(double_mas, act)
                 return res
                 }
+                
+    [<ExcludeFromCodeCoverage>]            
     module Program =
         [<EntryPoint>]
+        
         let main argv = 
             Calculator.Print(Calculator.Calculate("2/3"))
             0
