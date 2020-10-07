@@ -1,9 +1,12 @@
 ﻿namespace HW2
 
+    open System
     open System.Diagnostics.CodeAnalysis
     open System.Linq.Expressions
+    open System.Text
+    open FSharp.Data
 
-    module Calculator =
+   (* module Calculator =
         open System
         [<ExcludeFromCodeCoverage>]
         type MaybeBuilder() =
@@ -69,11 +72,13 @@
                 let! res = calc(double_mas, act)
                 return res
                 }
+        *)        
+                
                 
     [<ExcludeFromCodeCoverage>]            
     module Program =
         [<EntryPoint>]
-        
-        let main argv = 
-            Calculator.Print(Calculator.Calculate("2+3"))
+        let main argv =
+            let url = "https://localhost:5001/claculate?expression=2*4"
+            printfn "%s" (Http.RequestString(url))
             0
