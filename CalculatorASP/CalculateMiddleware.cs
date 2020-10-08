@@ -14,9 +14,6 @@ namespace CalculatorASP
                 _next = next;
                 variable_name = variableName;
             }
-
-        
-
             public async Task InvokeAsync(HttpContext context)
             {
                 try
@@ -26,7 +23,7 @@ namespace CalculatorASP
                 }
                 catch
                 {
-                    context.Response.StatusCode = 401;
+                    context.Response.StatusCode = 400;
                 }
             }
     }

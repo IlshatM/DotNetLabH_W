@@ -20,10 +20,16 @@ namespace CalculatorASP
         {
         }
 
+        private async Task AddResultInHeaders(HttpContext context, string result, string key)
+        {
+            context
+                .Response
+                .Headers
+                .Add(key,result);
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
             app.UseRouting();
             app.UseExpression("expression");
             app.UseCalculator("expression");
@@ -31,10 +37,13 @@ namespace CalculatorASP
             {
                 endpoints.MapGet("/calculate", async context =>
                 {
-                    await context.
-                        Response.WriteAsync(Calculator.Calculate(context.Request.Query["expression"]).ToString());
-                    
+                    await AddResultInHeaders(
+                        context,
+                        Calculator.Calculate(context.Request.Query["expression"]).ToString(),
+                        "calculator_result"
+                    );
                 });
+
                 
             });
         }
