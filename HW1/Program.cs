@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 namespace HW1
 {
     
@@ -7,7 +8,7 @@ namespace HW1
         public static double Res;
         public static void Main(string[] args)
         {
-            Res = Calculator.Calculate("2+3-1");//4
+            Res = Calculator.Calculate("2+3-1");
             Console.WriteLine(Res);
         }
     }
