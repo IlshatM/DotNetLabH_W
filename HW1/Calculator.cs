@@ -7,7 +7,29 @@ namespace HW1
     {
         public static double Calculate(string s)
         {
-            return NumberPlus(s);
+            StringBuilder sb = new StringBuilder(s);
+            bool reversed = false;
+            if (sb[0] == '-')
+            {
+                sb.Remove(0, 1);
+                for (int i = 0; i < sb.Length; i++)
+                {
+                    if (sb[i] == '-') sb.Replace('-','+',i,1);
+                    else if (sb[i] == '+') sb.Replace('+','-',i,1);
+                }
+
+                reversed = true;
+            }
+            for (int i = 0; i < sb.Length-1; i++)
+            {
+                if ((sb[i] == '+' || sb[i] == '-') && (sb[i + 1] == '+' || sb[i + 1] == '-'))
+                {
+                    sb.Remove(i, 1);
+                }
+            }
+
+            if (reversed) return -1*NumberPlus(sb.ToString());
+            return NumberPlus(sb.ToString());
         }
         private static double NumberPlus(string s)
         {

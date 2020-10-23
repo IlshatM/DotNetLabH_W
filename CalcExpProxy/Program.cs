@@ -54,6 +54,22 @@ namespace CalcExpProxy
                         Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.MinusRoot)),Expression.NewArrayInit(typeof(double),args));
                     return res;
                 }
+                else if(Convert.ToString(node.Value).Contains('*'))
+                {
+                    List<Expression> args = new List<Expression>();
+                    foreach (var i in Convert.ToString(node.Value).Split('*'))
+                    {
+                        args.Add(Expression.Constant(i,typeof(string)));
+                    }
+
+                    for (int i = 0; i < args.Count; i++)
+                    {
+                        args[i] = this.Visit(args[i]);
+                    }
+                    var res = 
+                        Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.MultiRoot)),Expression.NewArrayInit(typeof(double),args));
+                    return res;
+                }
                 else
                 {
                     return Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.GetReq)),
@@ -71,6 +87,16 @@ namespace CalcExpProxy
     
     static class Calculator
     {
+        public static double MultiRoot(params double[] mas)
+        {
+            var res = 1.0;
+            foreach (var i in mas)
+            {
+                res = GetReq($"{res}*{i}");
+            }
+
+            return res;
+        }
         public static double Root(params double[] mas)
         {
             var res = 0.0;
@@ -117,7 +143,8 @@ namespace CalcExpProxy
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Calculator.CreateTree("2+3*4-1+11-4/2"));
+            var res = Expression.Lambda<Func<double>>(Calculator.CreateTree("2*3-11+4/2")).Compile()();
+            Console.WriteLine(res);
         }
     }
 }
