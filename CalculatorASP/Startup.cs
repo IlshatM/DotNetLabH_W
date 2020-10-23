@@ -43,8 +43,6 @@ namespace CalculatorASP
                         "calculator_result"
                     );
                 });
-
-                
             });
         }
     }

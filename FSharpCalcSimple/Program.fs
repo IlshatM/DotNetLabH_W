@@ -50,9 +50,9 @@
                     let! response = GetRequest(url)
                     let! res = CreateAnswerAsync(response)
                     return res|>Some
-                }|>Async.RunSynchronously
+                }
         let public Solve(expression) =
-            let res = Calculate(expression)
+            let res = Calculate(expression)|>Async.RunSynchronously
             match res with
             |Some s -> s
             |None -> "Unknown error"

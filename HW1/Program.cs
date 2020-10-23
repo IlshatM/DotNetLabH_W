@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 namespace HW1
 {
-    
     public class Program
     {
         public static double Res;
