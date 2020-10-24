@@ -6,7 +6,7 @@ namespace HW1
     {
         public static void Main(string[] args)
         {
-            var a  = Calculator.Calculate("-5-1");
+            var a  = Calculator.Calculate("0,2-4");
             Console.WriteLine(a);
         }
     }

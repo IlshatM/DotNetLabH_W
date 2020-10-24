@@ -76,7 +76,7 @@ namespace HW1
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < s.Length; i++)
             {
-                if (Char.IsDigit(s[i]))
+                if (Char.IsDigit(s[i])||s[i]==',')
                 {
                     sb.Append(s[i]);
                 }

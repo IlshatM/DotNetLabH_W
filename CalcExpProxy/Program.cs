@@ -21,10 +21,10 @@ namespace CalcExpProxy
         {
             if (node.Type == typeof(string))
             {
-                if(Convert.ToString(node.Value).Contains('+'))
+                if(Calculator.ContainsOutSide(Convert.ToString(node.Value),'+'))
                 {
                     List<Expression> args = new List<Expression>();
-                    foreach (var i in Convert.ToString(node.Value).Split('+'))
+                    foreach (var i in  Calculator.Split(Convert.ToString(node.Value),'+'))
                     {
                         args.Add(Expression.Constant(i,typeof(string)));
                     }
@@ -38,10 +38,10 @@ namespace CalcExpProxy
                     
                     return res;
                 }
-                if (Convert.ToString(node.Value).Contains('-'))
+                if (Calculator.ContainsOutSide(Convert.ToString(node.Value),'-'))
                 {
                     List<Expression> args = new List<Expression>();
-                    foreach (var i in Convert.ToString(node.Value).Split('-'))
+                    foreach (var i in Calculator.Split(Convert.ToString(node.Value),'-'))
                     {
                         args.Add(Expression.Constant(i,typeof(string)));
                     }
@@ -54,7 +54,7 @@ namespace CalcExpProxy
                         Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.MinusRoot)),Expression.NewArrayInit(typeof(double),args));
                     return res;
                 }
-                else if(Convert.ToString(node.Value).Contains('*'))
+                if(Calculator.ContainsOutSide(Convert.ToString(node.Value),'*'))
                 {
                     List<Expression> args = new List<Expression>();
                     foreach (var i in Convert.ToString(node.Value).Split('*'))
@@ -69,6 +69,31 @@ namespace CalcExpProxy
                     var res = 
                         Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.MultiRoot)),Expression.NewArrayInit(typeof(double),args));
                     return res;
+                }
+
+                if (Calculator.ContainsOutSide(Convert.ToString(node.Value),'/'))
+                {
+                    List<Expression> args = new List<Expression>();
+                    foreach (var i in Convert.ToString(node.Value).Split('/'))
+                    {
+                        args.Add(Expression.Constant(i,typeof(string)));
+                    }
+
+                    for (int i = 0; i < args.Count; i++)
+                    {
+                        args[i] = this.Visit(args[i]);
+                    }
+                    var res = 
+                        Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.DevRoot)),Expression.NewArrayInit(typeof(double),args));
+                    return res;
+                }
+
+                if (Convert.ToString(node.Value)[0] == '(' && 
+                    Convert.ToString(node.Value)[Convert.ToString(node.Value).Length-1] == ')')
+                {
+                    string s = Convert.ToString(node.Value).Remove(0, 1);
+                    s = s.Remove(s.Length - 1, 1);
+                    return this.Visit(Expression.Constant(s, typeof(string)));
                 }
                 else
                 {
@@ -85,8 +110,61 @@ namespace CalcExpProxy
         
     }
     
+    
     static class Calculator
     {
+        public static bool ContainsOutSide(string expr, char r)
+        {
+            bool inside = false;
+            foreach (var i in expr)
+            {
+                if (i == '(') inside = true;
+                else if (i == ')') inside = false;
+                if (i == r && !inside) return true;
+            }
+
+            return false;
+        }
+        public static double DevRoot(params double[] mas)
+        {
+            var res = mas[0]*mas[0];
+            foreach (var i in mas)
+            {
+                res = GetReq($"{res}/{i}");
+            }
+
+            return res;
+        }
+        public static string[] Split(string expression, char r)
+        {
+            StringBuilder sb = new StringBuilder();
+            bool inside = false;
+            List<string> result = new List<string>();
+            foreach (var i in expression)
+            {
+                if (i == '(')
+                {
+                    inside = true;
+                    sb.Append(i);
+                }
+                else if (i == ')')
+                {
+                    inside = false;
+                    sb.Append(i);
+                }
+                else if (!inside && i == r)
+                {
+                    result.Add(sb.ToString());
+                    sb.Clear();
+                }
+                else
+                {
+                    sb.Append(i);
+                }
+            }
+            result.Add(sb.ToString());
+            return result.ToArray();
+        }
         public static double MultiRoot(params double[] mas)
         {
             var res = 1.0;
@@ -143,7 +221,7 @@ namespace CalcExpProxy
     {
         static void Main(string[] args)
         {
-            var res = Expression.Lambda<Func<double>>(Calculator.CreateTree("2*3-11+4/2")).Compile()();
+            var res = Expression.Lambda<Func<double>>(Calculator.CreateTree("(2+3)/12-5")).Compile()();
             Console.WriteLine(res);
         }
     }
