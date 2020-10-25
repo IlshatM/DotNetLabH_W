@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace HW1
@@ -7,20 +8,72 @@ namespace HW1
     {
         public static double Calculate(string s)
         {
+            s = MinusAfterMult(s);
+            s = MinusAndIrCheck(s, out var reversed);
+            
+            if (reversed) return -1*NumberPlus(s);
+            return NumberPlus(s);
+        }
+
+        private static void ChangePrev(StringBuilder sb, int index)
+        {
+            sb.Remove(index, 1);
+            int i;
+            bool changed = false;
+            for (i=index; i >= 0; i--)
+            {
+                if (sb[i] == '+')
+                {
+                    sb[i] = '-';
+                    changed = true;
+                    break;
+                }
+                if (sb[i] == '-')
+                {
+                    sb[i] = '+';
+                    changed = true;
+                    break;
+                }
+                
+            }
+            if (!changed) sb.Insert(0, '-');
+        }
+        private static string MinusAfterMult(string s)
+        {
+            List<int> ls = new List<int>();
+            for (int i = 0; i < s.Length-1; i++)
+            {
+                if ((s[i] == '*' || s[i] == '/') && s[i + 1] == '-')
+                {
+                    ls.Add(i+1);
+                }
+            }
             StringBuilder sb = new StringBuilder(s);
-            bool reversed = false;
+            foreach (var i in ls)
+            {
+                ChangePrev(sb,i);
+            }
+
+            return sb.ToString();
+
+        }
+        private static string MinusAndIrCheck(string s, out bool reversed)
+        {
+            StringBuilder sb = new StringBuilder(s);
+            reversed = false;
             if (sb[0] == '-')
             {
                 sb.Remove(0, 1);
                 for (int i = 0; i < sb.Length; i++)
                 {
-                    if (sb[i] == '-') sb.Replace('-','+',i,1);
-                    else if (sb[i] == '+') sb.Replace('+','-',i,1);
+                    if (sb[i] == '-') sb.Replace('-', '+', i, 1);
+                    else if (sb[i] == '+') sb.Replace('+', '-', i, 1);
                 }
 
                 reversed = true;
             }
-            for (int i = 0; i < sb.Length-1; i++)
+
+            for (int i = 0; i < sb.Length - 1; i++)
             {
                 if ((sb[i] == '+' || sb[i] == '-') && (sb[i + 1] == '+' || sb[i + 1] == '-'))
                 {
@@ -28,9 +81,9 @@ namespace HW1
                 }
             }
 
-            if (reversed) return -1*NumberPlus(sb.ToString());
-            return NumberPlus(sb.ToString());
+            return sb.ToString();
         }
+
         private static double NumberPlus(string s)
         {
             string[] str = s.Split('+');
