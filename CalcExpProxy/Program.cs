@@ -13,14 +13,21 @@ using System.Threading.Tasks;
 
 namespace CalcExpProxy
 {
-    class TreeCopliator : ExpressionVisitor
+    class TreeCompilator : ExpressionVisitor
     {
         protected override Expression VisitNewArray(NewArrayExpression node)
         {
             List<object> ls = new List<object>();
+            List<Task<object>> tasks = new List<Task<object>>();
             foreach (var i in node.Expressions)
             {
-                ls.Add(((ConstantExpression)this.Visit(i)).Value);
+                tasks.Add(Task.Run(() => ((ConstantExpression) this.Visit(i)).Value));
+            }
+
+            Task.WhenAll(tasks).Wait();
+            foreach (var i in tasks)
+            {
+                ls.Add(i.Result);
             }
             return Expression.Constant(ls, typeof(List<object>));
         }
@@ -63,7 +70,8 @@ namespace CalcExpProxy
         {
             var res = Calculator.CreateTree("12+(3-6)*2");
             Console.WriteLine(res);
-            TreeCopliator tc =new TreeCopliator();
+            TreeCompilator tc =new TreeCompilator();
+            
             var a = tc.Visit(res);
             Console.WriteLine(a);
         }
