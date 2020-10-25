@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text;
@@ -104,12 +105,32 @@ namespace CalcExpProxy
             return expression;
         }
         
-        public static Expression CreateTree(string expr)
+        private static Expression CreateTree(string expr)
         {
             Expression start = Expression.Constant(expr,typeof(string));
             MyVisitor mv = new MyVisitor();
             var res = mv.Visit(start);
             return res;
+        }
+
+        private static Expression CalculateTree(Expression tree)
+        {
+            TreeCompilator tc = new TreeCompilator(); 
+            return tc.Visit(tree);
+        }
+
+        public static double Calculate(string expr)
+        { 
+            StringBuilder pure_expr = new StringBuilder();
+            char[] suitable_symbols = new[] {'+', '-', '*', '/', '(', ')'};
+            foreach (var i in expr)
+            {
+                if (suitable_symbols.Contains(i) || Char.IsDigit(i))
+                {
+                    pure_expr.Append(i);
+                }
+            }
+            return (double)((ConstantExpression)CalculateTree(CreateTree(pure_expr.ToString()))).Value;
         }
     }
 }
