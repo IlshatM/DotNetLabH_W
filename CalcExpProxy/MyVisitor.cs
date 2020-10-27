@@ -12,68 +12,35 @@ namespace CalcExpProxy
             {
                 if(Calculator.ContainsOutSide(Convert.ToString(node.Value),'+'))
                 {
-                    List<Expression> args = new List<Expression>();
-                    foreach (var i in  Calculator.Split(Convert.ToString(node.Value),'+'))
-                    {
-                        args.Add(Expression.Constant(i,typeof(string)));
-                    }
-
-                    for (int i = 0; i < args.Count; i++)
-                    {
-                        args[i] = this.Visit(args[i]);
-                    }
-                    var res = 
-                        Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.Root)),Expression.NewArrayInit(typeof(double),args));
-                    
+                    var str = Calculator.Split(Convert.ToString(node.Value), '+');
+                    var left = this.Visit(Expression.Constant(str[0], typeof(string)));
+                    var right = this.Visit(Expression.Constant(str[1], typeof(string)));
+                    var res = Expression.Add(left, right);
                     return res;
                 }
                 if (Calculator.ContainsOutSide(Convert.ToString(node.Value),'-'))
                 {
-                    List<Expression> args = new List<Expression>();
-                    foreach (var i in Calculator.Split(Convert.ToString(node.Value),'-'))
-                    {
-                        args.Add(Expression.Constant(i,typeof(string)));
-                    }
-
-                    for (int i = 0; i < args.Count; i++)
-                    {
-                        args[i] = this.Visit(args[i]);
-                    }
-                    var res = 
-                        Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.MinusRoot)),Expression.NewArrayInit(typeof(double),args));
+                    var str = Calculator.Split(Convert.ToString(node.Value), '-');
+                    var left = this.Visit(Expression.Constant(str[0], typeof(string)));
+                    var right = this.Visit(Expression.Constant(str[1], typeof(string)));
+                    var res = Expression.Subtract(left, right);
                     return res;
                 }
                 if(Calculator.ContainsOutSide(Convert.ToString(node.Value),'*'))
                 {
-                    List<Expression> args = new List<Expression>();
-                    foreach (var i in Convert.ToString(node.Value).Split('*'))
-                    {
-                        args.Add(Expression.Constant(i,typeof(string)));
-                    }
-
-                    for (int i = 0; i < args.Count; i++)
-                    {
-                        args[i] = this.Visit(args[i]);
-                    }
-                    var res = 
-                        Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.MultiRoot)),Expression.NewArrayInit(typeof(double),args));
+                    var str = Calculator.Split(Convert.ToString(node.Value), '*');
+                    var left = this.Visit(Expression.Constant(str[0], typeof(string)));
+                    var right = this.Visit(Expression.Constant(str[1], typeof(string)));
+                    var res = Expression.Multiply(left, right);
                     return res;
                 }
 
                 if (Calculator.ContainsOutSide(Convert.ToString(node.Value),'/'))
                 {
-                    List<Expression> args = new List<Expression>();
-                    foreach (var i in Convert.ToString(node.Value).Split('/'))
-                    {
-                        args.Add(Expression.Constant(i,typeof(string)));
-                    }
-
-                    for (int i = 0; i < args.Count; i++)
-                    {
-                        args[i] = this.Visit(args[i]);
-                    }
-                    var res = 
-                        Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.DevRoot)),Expression.NewArrayInit(typeof(double),args));
+                    var str = Calculator.Split(Convert.ToString(node.Value), '/');
+                    var left = this.Visit(Expression.Constant(str[0], typeof(string)));
+                    var right = this.Visit(Expression.Constant(str[1], typeof(string)));
+                    var res = Expression.Divide(left, right);
                     return res;
                 }
 
@@ -86,11 +53,7 @@ namespace CalcExpProxy
                 }
                 else
                 {
-                    return Expression.Call(typeof(Calculator).GetMethod(nameof(Calculator.GetReq)),
-                        Expression.Constant(Convert.ToString(node.Value),
-                            typeof(string)
-                        )
-                    );
+                    return Expression.Constant(Convert.ToDouble(node.Value), typeof(double));
                 }
 
             }

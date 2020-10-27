@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using HW1;
+using CalculatorASP.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,32 +18,15 @@ namespace CalculatorASP
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-        }
-
-        private async Task AddResultInHeaders(HttpContext context, string result, string key)
-        {
-            context
-                .Response
-                .Headers
-                .Add(key,result);
+            services.AddTransient<ICalculator, CalculatorASP.Services.Calculator>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ICalculator calculator)
         {
             app.UseRouting();
             app.UseExpression("expression");
-            app.UseCalculator("expression");
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/calculate", async context =>
-                {
-                    await AddResultInHeaders(
-                        context,
-                        Calculator.Calculate(context.Request.Query["expression"]).ToString(),
-                        "calculator_result"
-                    );
-                });
-            });
+            app.UseCalculator("expression",calculator);
+            app.UseResult("expression", calculator);
         }
     }
 }
