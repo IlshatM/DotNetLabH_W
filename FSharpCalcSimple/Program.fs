@@ -43,7 +43,7 @@
                 return res
                 
             }
-        let private Calculate(expression:string) =
+        let public Calculate(expression:string) =
                 maybe_async{
                     let a = expression|>ConvertExpression
                     let url = "https://localhost:5001/calculate?expression="+a
@@ -51,17 +51,20 @@
                     let! res = CreateAnswerAsync(response)
                     return res|>Some
                 }
-        let public Solve(expression) =
-            let res = Calculate(expression)|>Async.RunSynchronously
+        
+
+
+    module Solving=
+        let public Solve expression proxy =
+            let res = expression|>proxy|>Async.RunSynchronously
             match res with
             |Some s -> s
             |None -> "Unknown error"
-
-
-
+    
     [<ExcludeFromCodeCoverage>]            
     module Program =
         [<EntryPoint>]
         let main argv =
-            printfn "%s" (Calculator.Solve("12+6-7*2"))
+            let proxy_Func = Solving.Solve "2+3" 
+            printfn "%s" (proxy_Func Calculator.Calculate)
             0
