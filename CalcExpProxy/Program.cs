@@ -12,13 +12,18 @@ namespace CalcExpProxy
 {
     class Program
     {
+        public static void PrintTree(MyTree mt)
+        {
+            Console.WriteLine(mt);
+            PrintTree(mt.Left);
+            PrintTree(mt.Right);
+        }
         static void Main(string[] args)
         {
             MyVisitor mv = new MyVisitor();
             var input = Expression.Constant("(2+3)/12*7+8*9", typeof(string));
             var res = Expression.Lambda<Func<double>>(mv.Visit(input)).Compile()();
-            Console.WriteLine(res);
-            Console.WriteLine(Calculator.GetReqAsync("2+3").Result);
+            var tree = Calculator.CreateTree(mv.Visit(input));
         }
     }
 }

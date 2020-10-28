@@ -11,6 +11,7 @@ namespace CalcExpProxy
 {
     static class Calculator
     {
+
         public static bool ContainsOutSide(string expr, char r)
         {
             bool inside = false;
@@ -66,10 +67,19 @@ namespace CalcExpProxy
             return str;
         }
 
+        public static MyTree CreateTree(Expression expression)
+        {
+            TreeCompilator treeCompilator = new TreeCompilator();
+            treeCompilator.root=new MyTree(expression);
+            MyTree to_return = treeCompilator.root;
+            treeCompilator.Visit(expression);
+            return to_return;
+        }
         public static async Task<double> GetReqAsync(string expression)
         {
             HttpClient client = new HttpClient();
-            var result = await client.GetAsync($"https://localhost:5001/calculate?expression={ConvertExpression(expression)}");
+            var result = await client.GetAsync
+                ($"https://localhost:5001/calculate?expression={ConvertExpression(expression)}");
             return Convert.ToDouble(result.Headers.GetValues("calculator_result").First());
         }
         private static string ConvertExpression(string expression)

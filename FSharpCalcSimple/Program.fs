@@ -56,7 +56,7 @@
 
     module Solving=
         let public Solve expression proxy =
-            let res = expression|>proxy|>Async.RunSynchronously
+            let res = expression|>proxy|>Async.RunSynchronously 
             match res with
             |Some s -> s
             |None -> "Unknown error"
