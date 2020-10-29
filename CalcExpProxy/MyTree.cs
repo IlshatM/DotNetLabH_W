@@ -12,7 +12,13 @@ namespace CalcExpProxy
         public MyTree Left;
         public MyTree Right;
         public char Operation;
-        public Func<string, Task<double>> Calculate = Calculator.GetReqAsync;
+
+        public async Task GetValue()
+        {
+            var t =Calculator.GetReqAsync($"{Left.Value}{Operation}{Right.Value}");
+            Value = await t.ConfigureAwait(false);
+            Operation = 'V';
+        }
 
         public MyTree(Expression expression)
         {

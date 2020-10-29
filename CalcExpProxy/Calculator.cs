@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace CalcExpProxy
 {
@@ -75,7 +77,72 @@ namespace CalcExpProxy
             treeCompilator.Visit(expression);
             return to_return;
         }
-        public static async Task<double> GetReqAsync(string expression)
+
+        
+        public static Dictionary<Task, List<Task>> Before = new Dictionary<Task, List<Task>>();
+        public static async Task FillDictionaryAsync(MyTree root)
+        {
+            var a = root.GetValue();
+            Before.Add(a, new List<Task>());
+            if (root.Left.Value == null)
+            {
+                var b = root.Left.GetValue();
+                Before[a].Add(b);
+                await FillDictionaryAsync(root.Left);
+            }
+            if (root.Right.Value == null)
+            {
+                Task c = root.Right.GetValue();
+                Before[a].Add(c);
+                await FillDictionaryAsync(root.Right);
+            }
+        }
+        
+        
+        
+        
+        
+        
+        public static async Task<double> CalculateAsync(string expression)
+        {
+            MyVisitor mv = new MyVisitor();
+            var input = Expression.Constant(expression, typeof(string));
+            var res = Expression.Lambda<Func<double>>(mv.Visit(input)).Compile()();
+            var tree = Calculator.CreateTree(mv.Visit(input));
+            await FillDictionaryAsync(tree);
+            await ProcessInParallelAsync(tree);
+            return (double) tree.Value;
+        }
+        public static async Task ProcessInParallelAsync(MyTree tree)
+        {
+            Task t1 = null;
+            Task t2 = null;
+            if (tree.Left.Operation != 'V')
+            {
+                t1 = ProcessInParallelAsync(tree.Left);
+            }
+
+            if (tree.Right.Operation != 'V')
+            {
+                t2 = ProcessInParallelAsync(tree.Right);
+            }
+
+            if (t1 != null && t2 != null)
+            {
+                await Task.WhenAll(t1!, t2!);
+            }
+            else if(t1==null && t2!=null)
+            {
+                await t2;
+            }
+            else if(t1!=null && t2==null)
+            {
+                await t1;
+            }
+
+            await tree.GetValue();
+        }
+        public static async Task<double?> GetReqAsync(string expression)
         {
             HttpClient client = new HttpClient();
             var result = await client.GetAsync
