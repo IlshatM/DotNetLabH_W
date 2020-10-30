@@ -9,6 +9,7 @@ using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CalcExpProxy
 {
@@ -16,7 +17,9 @@ namespace CalcExpProxy
     {
         static async Task Main(string[] args)
         {
-           Console.WriteLine(await Calculator.CalculateAsync("(2+3)/12*7+8*9"));
+            
+            Console.WriteLine(await Calculator.CalculateAsync("(2+3)/12*7+8*9+11"));
         }
+        
     }
 }

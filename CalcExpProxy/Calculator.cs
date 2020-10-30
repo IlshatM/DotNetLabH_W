@@ -8,9 +8,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CalcExpProxy
-{
+{ 
     static class Calculator
     {
 
@@ -31,10 +32,10 @@ namespace CalcExpProxy
             StringBuilder sb = new StringBuilder();
             string[] str = new string[2];
             bool inside = false;
-            bool got_first = false;
+            bool gotFirst = false;
             foreach (var i in expression)
             {
-                if (!got_first)
+                if (!gotFirst)
                 {
                     if (i == '(')
                     {
@@ -49,7 +50,7 @@ namespace CalcExpProxy
                     else if (i == r && !inside)
                     {
                         str[0] = sb.ToString();
-                        got_first = true;
+                        gotFirst = true;
                         sb.Clear();
                     }
                     else
@@ -61,10 +62,7 @@ namespace CalcExpProxy
                 {
                     sb.Append(i);
                 }
-
-
             }
-
             str[1] = sb.ToString();
             return str;
         }
@@ -72,22 +70,22 @@ namespace CalcExpProxy
         public static MyTree CreateTree(Expression expression)
         {
             TreeCompilator treeCompilator = new TreeCompilator();
+            
             treeCompilator.root=new MyTree(expression);
-            MyTree to_return = treeCompilator.root;
+            MyTree toReturn = treeCompilator.root;
             treeCompilator.Visit(expression);
-            return to_return;
+            return toReturn;
         }
 
         public static async Task<double> CalculateAsync(string expression)
         {
             MyVisitor mv = new MyVisitor();
             var input = Expression.Constant(expression, typeof(string));
-            var res = Expression.Lambda<Func<double>>(mv.Visit(input)).Compile()();
-            var tree = Calculator.CreateTree(mv.Visit(input));
+            var tree = CreateTree(mv.Visit(input));
             await ProcessInParallelAsync(tree);
+            Console.WriteLine(tree.displayNode());
             return (double) tree.Value;
         }
-        
         public static async Task ProcessInParallelAsync(MyTree tree)
         {
             Task t1 = null;
@@ -105,12 +103,13 @@ namespace CalcExpProxy
             if (t1 != null && t2 != null)
             {
                 await Task.WhenAll(t1, t2);
+                
             }
-            else if(t1==null && t2!=null)
+            else if (t1 == null && t2 != null) 
             {
                 await t2;
             }
-            else if(t1!=null && t2==null)
+            else if (t1 != null) 
             {
                 await t1;
             }
