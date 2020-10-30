@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CalcExpProxy
 {
@@ -29,7 +30,7 @@ namespace CalcExpProxy
                 Right.displayNode(output, depth + 1);
  
             output.Append('\t', depth);
-            output.AppendLine(depth.ToString()+"|"+Math.Round(Value.Value,2).ToString() + oper_to_write);
+            output.AppendLine(depth.ToString()+"|"+Math.Round(Value.Value,2) + oper_to_write);
  
  
             if (Left != null)
@@ -38,7 +39,8 @@ namespace CalcExpProxy
         }
         public async Task GetValue()
         {
-            var t =Calculator.GetReqAsync($"{Left.Value}{Operation}{Right.Value}");
+            var calculator = Program.ServiceProvider().GetService<ICalculatorAsync>();
+            var t =calculator.GetReqAsync($"{Left.Value}{Operation}{Right.Value}");
             Value = await t.ConfigureAwait(false);
             Operation = 'V';
         }

@@ -12,72 +12,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CalcExpProxy
 { 
-    static class Calculator
+    class Calculator:ICalculatorAsync
     {
-
-        public static bool ContainsOutSide(string expr, char r)
-        {
-            bool inside = false;
-            foreach (var i in expr)
-            {
-                if (i == '(') inside = true;
-                else if (i == ')') inside = false;
-                if (i == r && !inside) return true;
-            }
-
-            return false;
-        }
-        public static string[] Split(string expression, char r)
-        {
-            StringBuilder sb = new StringBuilder();
-            string[] str = new string[2];
-            bool inside = false;
-            bool gotFirst = false;
-            foreach (var i in expression)
-            {
-                if (!gotFirst)
-                {
-                    if (i == '(')
-                    {
-                        inside = true;
-                        sb.Append(i);
-                    }
-                    else if (i == ')')
-                    {
-                        inside = false;
-                        sb.Append(i);
-                    }
-                    else if (i == r && !inside)
-                    {
-                        str[0] = sb.ToString();
-                        gotFirst = true;
-                        sb.Clear();
-                    }
-                    else
-                    {
-                        sb.Append(i);
-                    }
-                }
-                else
-                {
-                    sb.Append(i);
-                }
-            }
-            str[1] = sb.ToString();
-            return str;
-        }
-
-        public static MyTree CreateTree(Expression expression)
+        public MyTree CreateTree(Expression expression)
         {
             TreeCompilator treeCompilator = new TreeCompilator();
-            
             treeCompilator.root=new MyTree(expression);
             MyTree toReturn = treeCompilator.root;
             treeCompilator.Visit(expression);
             return toReturn;
         }
 
-        public static async Task<double> CalculateAsync(string expression)
+        public async Task<double> CalculateAsync(string expression)
         {
             MyVisitor mv = new MyVisitor();
             var input = Expression.Constant(expression, typeof(string));
@@ -86,7 +32,7 @@ namespace CalcExpProxy
             Console.WriteLine(tree.displayNode());
             return (double) tree.Value;
         }
-        public static async Task ProcessInParallelAsync(MyTree tree)
+        public async Task ProcessInParallelAsync(MyTree tree)
         {
             Task t1 = null;
             Task t2 = null;
@@ -116,7 +62,7 @@ namespace CalcExpProxy
 
             await tree.GetValue();
         }
-        public static async Task<double?> GetReqAsync(string expression)
+        public async Task<double?> GetReqAsync(string expression)
         {
             HttpClient client = new HttpClient();
             var result = await client.GetAsync
@@ -124,7 +70,7 @@ namespace CalcExpProxy
             return Convert.ToDouble(result.Headers.GetValues("calculator_result").First());
         }
         
-        private static string ConvertExpression(string expression)
+        private string ConvertExpression(string expression)
         {
             expression = expression.Replace("+", "%2B");
             expression = expression.Replace("*", "%2A");

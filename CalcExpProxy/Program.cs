@@ -10,16 +10,26 @@ using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace CalcExpProxy
 {
     class Program
     {
+        
         static async Task Main(string[] args)
         {
-            
-            Console.WriteLine(await Calculator.CalculateAsync("(2+3)/12*7+8*9+11"));
+            var serviceProvider = ServiceProvider();
+            var calculator = serviceProvider.GetService<ICalculatorAsync>();    
+            Console.WriteLine(await calculator.CalculateAsync("(2+3)/12*7+8*9+11"));
         }
-        
+
+        public static ServiceProvider ServiceProvider()
+        {
+            var services = new ServiceCollection();
+            services.AddSingleton<ICalculatorAsync, Calculator>();
+            var serviceProvider = services.BuildServiceProvider();
+            return serviceProvider;
+        }
     }
 }
