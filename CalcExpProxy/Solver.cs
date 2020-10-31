@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CalcExpProxy
-{ 
-    class Calculator:ICalculatorAsync
+{
+    class Solver
     {
+        private ICalculatorAsync CalculatorAsync;
+        public Solver(ICalculatorAsync calculatorAsync)
+        {
+            CalculatorAsync = calculatorAsync;
+        }
         public MyTree CreateTree(Expression expression)
         {
             TreeCompilator treeCompilator = new TreeCompilator();
@@ -23,7 +26,7 @@ namespace CalcExpProxy
             return toReturn;
         }
 
-        public async Task<double> CalculateAsync(string expression)
+        public async Task<double> SolveAsync(string expression)
         {
             MyVisitor mv = new MyVisitor();
             var input = Expression.Constant(expression, typeof(string));
@@ -60,24 +63,11 @@ namespace CalcExpProxy
                 await t1;
             }
 
-            await tree.GetValue();
+            await tree.GetValue(CalculatorAsync);
         }
-        public async Task<double?> GetReqAsync(string expression)
+        public async Task<double?> GetAnswerAsync(string expression)
         {
-            HttpClient client = new HttpClient();
-            var result = await client.GetAsync
-                ($"https://localhost:5001/calculate?expression={ConvertExpression(expression)}");
-            return Convert.ToDouble(result.Headers.GetValues("calculator_result").First());
+            return await CalculatorAsync.CalculateAsync(expression);
         }
-        
-        private string ConvertExpression(string expression)
-        {
-            expression = expression.Replace("+", "%2B");
-            expression = expression.Replace("*", "%2A");
-            expression = expression.Replace("/", "%2F");
-            return expression;
-        }
-        
-        
     }
     }

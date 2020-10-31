@@ -7,7 +7,6 @@ namespace CalcExpProxy
 {
     class MyVisitor : ExpressionVisitor
     {
-        
         protected override Expression VisitConstant(ConstantExpression node)
         {
             if (node.Type == typeof(string))

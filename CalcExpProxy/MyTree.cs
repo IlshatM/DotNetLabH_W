@@ -37,10 +37,9 @@ namespace CalcExpProxy
                 Left.displayNode(output, depth + 1);
  
         }
-        public async Task GetValue()
+        public async Task GetValue(ICalculatorAsync CalculatorAsync)
         {
-            var calculator = Program.ServiceProvider().GetService<ICalculatorAsync>();
-            var t =calculator.GetReqAsync($"{Left.Value}{Operation}{Right.Value}");
+            var t =CalculatorAsync.CalculateAsync($"{Left.Value}{Operation}{Right.Value}");
             Value = await t.ConfigureAwait(false);
             Operation = 'V';
         }
