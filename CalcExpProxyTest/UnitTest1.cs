@@ -27,11 +27,11 @@ namespace CalcExpProxyTest
         [InlineData("1")]
         [InlineData("0/2")]
         [InlineData("1/0")]
-        public async Task Tests(string expression)
+        public void Tests(string expression)
         {
 
             Assert.Equal(solver.CompiledExpressionResult(expression), 
-                await new Solver(new CalculatorInApp()).SolveAsync(expression));
+                new Solver(new CalculatorInApp()).SolveAsync(expression).Result);
         }
     }
 }
