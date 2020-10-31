@@ -39,9 +39,13 @@ namespace CalcExpProxy
         }
         public async Task GetValue(ICalculatorAsync CalculatorAsync)
         {
-            var t =CalculatorAsync.CalculateAsync($"{Left.Value}{Operation}{Right.Value}");
-            Value = await t.ConfigureAwait(false);
-            Operation = 'V';
+            if (Value == null)
+            {
+                var t = CalculatorAsync.CalculateAsync($"{Left.Value}{Operation}{Right.Value}");
+
+                Value = await t.ConfigureAwait(false);
+                Operation = 'V';
+            }
         }
 
         public MyTree(Expression expression)

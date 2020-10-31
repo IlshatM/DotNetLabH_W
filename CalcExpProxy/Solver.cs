@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CalcExpProxy
 {
-    class Solver
+    public class Solver
     {
         private ICalculatorAsync CalculatorAsync;
         public Solver(ICalculatorAsync calculatorAsync)
@@ -26,6 +26,14 @@ namespace CalcExpProxy
             return toReturn;
         }
 
+        public double CompiledExpressionResult(string expression)
+        {
+            MyVisitor mv = new MyVisitor();
+            var input = Expression.Constant(expression, typeof(string));
+            var exprtree = mv.Visit(input);
+            return Expression.Lambda<Func<double>>(exprtree).Compile()();
+        }
+
         public async Task<double> SolveAsync(string expression)
         {
             MyVisitor mv = new MyVisitor();
@@ -39,14 +47,20 @@ namespace CalcExpProxy
         {
             Task t1 = null;
             Task t2 = null;
-            if (tree.Left.Operation != 'V')
+            if (tree.Left != null)
             {
-                t1 = ProcessInParallelAsync(tree.Left);
+                if (tree.Left.Operation != 'V')
+                {
+                    t1 = ProcessInParallelAsync(tree.Left);
+                }
             }
 
-            if (tree.Right.Operation != 'V')
+            if (tree.Right != null)
             {
-                t2 = ProcessInParallelAsync(tree.Right);
+                if (tree.Right.Operation != 'V')
+                {
+                    t2 = ProcessInParallelAsync(tree.Right);
+                }
             }
 
             if (t1 != null && t2 != null)
@@ -64,10 +78,6 @@ namespace CalcExpProxy
             }
 
             await tree.GetValue(CalculatorAsync);
-        }
-        public async Task<double?> GetAnswerAsync(string expression)
-        {
-            return await CalculatorAsync.CalculateAsync(expression);
         }
     }
     }
