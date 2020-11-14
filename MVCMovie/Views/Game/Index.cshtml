@@ -1,0 +1,13 @@
+﻿@using MvcMovie.Helpers
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model List<MvcMovie.Models.Game>
+
+@{
+    ViewBag.Title = "Games";
+    int a = 12;
+}
+
+@Html.DisplayFor(m=>m[0])
+<br>
+@Html.MyDisplay(m=>m)
+
