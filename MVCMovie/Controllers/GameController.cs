@@ -17,7 +17,9 @@ namespace MVCMovie.Controllers
         // GET
         public async Task<IActionResult> Index()
         {
-            var games = _context.Game.Select(g => g);
+            var games = _context.Game
+                .Select(g => g)
+                .Include(g=>g.BasedOnGameMovie);
             return View(await games.ToListAsync());
         }
     }

@@ -48,21 +48,19 @@ namespace MvcMovie.Helpers
                 if (type == typeof(int) || type == typeof(string)
                                         || type == typeof(long) || type == typeof(bool) || type.IsEnum)
                 {
-                    content.Append($"<div class \"display-field\">{model}</div>");
+                    content.Append($"<div class=\"display-field\">{model}</div>");
                     return content.ToString();
                 }
 
-                if (VisitedClasses.Contains(type))
+                if (!VisitedClasses.Contains(type))
                 {
-                    throw new Exception("LoopDetected");
-                }
+                    VisitedClasses.Add(type);
+                    foreach (var property in type.GetProperties())
+                    {
+                        content.Append($"<div class=\"display-label\">{property.Name}</div>");
+                        content.Append(GenerateHtmlString(property.GetValue(model)));
 
-                VisitedClasses.Add(type);
-
-                foreach (var property in type.GetProperties())
-                {
-                    content.Append($"<div class=\"display-label\">{property.Name}</div>");
-                    content.Append(GenerateHtmlString(property.GetValue(model)));
+                    }
                 }
 
                 return content.ToString();

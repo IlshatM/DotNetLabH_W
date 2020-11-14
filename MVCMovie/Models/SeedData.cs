@@ -19,14 +19,10 @@ namespace MvcMovie.Models
                 // Look for any movies.
                 if (!context.Movie.Any())
                 {
-
-
-
                     context.Movie.AddRange(
                         new Movie
                         {
                             Title = "When Harry Met Sally",
-                            ReleaseDate = DateTime.Parse("1989-2-12"),
                             Genre = "Romantic Comedy",
                             Price = 7.99M,
                             Rating = "R"
@@ -35,7 +31,6 @@ namespace MvcMovie.Models
                         new Movie
                         {
                             Title = "Ghostbusters ",
-                            ReleaseDate = DateTime.Parse("1984-3-13"),
                             Genre = "Comedy",
                             Rating = "R",
                             Price = 8.99M
@@ -44,7 +39,6 @@ namespace MvcMovie.Models
                         new Movie
                         {
                             Title = "Ghostbusters 2",
-                            ReleaseDate = DateTime.Parse("1986-2-23"),
                             Genre = "Comedy",
                             Rating = "R",
                             Price = 9.99M
@@ -53,7 +47,6 @@ namespace MvcMovie.Models
                         new Movie
                         {
                             Title = "Rio Bravo",
-                            ReleaseDate = DateTime.Parse("1959-4-15"),
                             Genre = "Western",
                             Rating = "R",
                             Price = 3.99M
@@ -66,6 +59,7 @@ namespace MvcMovie.Models
                     context.Remove(context.Game.Single(g => g.Name == "Call of Duty"));
                     context.Remove(context.Game.Single(g => g.Name == "Witcher 3"));
                     context.Remove(context.Game.Single(g => g.Name == "Dark Souls 3"));
+                    var movie = context.Movie.Single(m => m.Title == "Rio Bravo");
                     context.Game.AddRange(
                         new Game()
                         {
@@ -75,9 +69,7 @@ namespace MvcMovie.Models
                             Perspective = Perspective.FirstPerson,
                             Price = 2000.00M,
                             TotalHours = 200,
-                            BasedOnGameMovie = context.Movie.Single(m=>m.Title=="Rio Bravo")
-
-
+                            BasedOnGameMovie = movie
                         },
                         new Game()
                         {
@@ -92,17 +84,17 @@ namespace MvcMovie.Models
                         new Game()
                         {
                             Name = "Dark Souls 3",
-                            Count = 4,
+                            Count = 18,
                             CrossPlatformMultiplayer = true,
                             Perspective = Perspective.ThirdPerson,
                             Price = 1500.00M,
                             TotalHours = 60,
-                            BasedOnGameMovie = context.Movie.Single(m=>m.Title=="Ghostbusters ")
-                            
+                            BasedOnGameMovie = context.Movie.Single(m=>m.Title=="When Harry Met Sally")
+
                         }
                     );
-                    context.SaveChanges();
                 }
+                context.SaveChanges();
             }
         }
     }

@@ -6,6 +6,7 @@ namespace MvcMovie.Models
 {
     public class Game
     {
+        [Key]
         public int Id { get; set; }
         
         [Required]
@@ -23,7 +24,6 @@ namespace MvcMovie.Models
         public long TotalHours { get; set; }
         public bool CrossPlatformMultiplayer { get; set; }
         public Perspective Perspective { get; set; }
-        
         public Movie BasedOnGameMovie { get; set; }
     }
 }
