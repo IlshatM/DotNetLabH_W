@@ -14,11 +14,7 @@ namespace MvcMovie.Models
         [Required]
         public string Title { get; set; }
         
-
-        [Range(1, 100)]
-        [DataType(DataType.Currency)]
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal Price { get; set; }
+        public long Price { get; set; }
 
         [RegularExpression(@"^[A-Z]+[a-zA-Z]*$")]
         [Required]

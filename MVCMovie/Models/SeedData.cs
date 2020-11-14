@@ -24,7 +24,7 @@ namespace MvcMovie.Models
                         {
                             Title = "When Harry Met Sally",
                             Genre = "Romantic Comedy",
-                            Price = 7.99M,
+                            Price = 7,
                             Rating = "R"
                         },
 
@@ -33,7 +33,7 @@ namespace MvcMovie.Models
                             Title = "Ghostbusters ",
                             Genre = "Comedy",
                             Rating = "R",
-                            Price = 8.99M
+                            Price = 8
                         },
 
                         new Movie
@@ -41,7 +41,7 @@ namespace MvcMovie.Models
                             Title = "Ghostbusters 2",
                             Genre = "Comedy",
                             Rating = "R",
-                            Price = 9.99M
+                            Price = 9
                         },
 
                         new Movie
@@ -49,16 +49,13 @@ namespace MvcMovie.Models
                             Title = "Rio Bravo",
                             Genre = "Western",
                             Rating = "R",
-                            Price = 3.99M
+                            Price = 3
                         }
                     );
                 }
 
-                if (context.Game.Any())
+                if (!context.Game.Any())
                 {
-                    context.Remove(context.Game.Single(g => g.Name == "Call of Duty"));
-                    context.Remove(context.Game.Single(g => g.Name == "Witcher 3"));
-                    context.Remove(context.Game.Single(g => g.Name == "Dark Souls 3"));
                     var movie = context.Movie.Single(m => m.Title == "Rio Bravo");
                     context.Game.AddRange(
                         new Game()
@@ -67,7 +64,7 @@ namespace MvcMovie.Models
                             Count = 2,
                             CrossPlatformMultiplayer = true,
                             Perspective = Perspective.FirstPerson,
-                            Price = 2000.00M,
+                            Price = 2000,
                             TotalHours = 200,
                             BasedOnGameMovie = movie
                         },
@@ -77,7 +74,7 @@ namespace MvcMovie.Models
                             Count = 3,
                             CrossPlatformMultiplayer = false,
                             Perspective = Perspective.ThirdPerson,
-                            Price = 1000.00M,
+                            Price = 1000,
                             TotalHours = 250,
                             BasedOnGameMovie = context.Movie.Single(m=>m.Title=="Ghostbusters 2")
                         },
@@ -87,7 +84,7 @@ namespace MvcMovie.Models
                             Count = 18,
                             CrossPlatformMultiplayer = true,
                             Perspective = Perspective.ThirdPerson,
-                            Price = 1500.00M,
+                            Price = 1500,
                             TotalHours = 60,
                             BasedOnGameMovie = context.Movie.Single(m=>m.Title=="When Harry Met Sally")
 

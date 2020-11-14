@@ -18,7 +18,7 @@ namespace MvcMovie.Models
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 2)")]
         [Display(Name = "Цена")]
-        public decimal Price { get; set; }
+        public long Price{ get; set; }
         
         public int Count { get; set; }
         public long TotalHours { get; set; }

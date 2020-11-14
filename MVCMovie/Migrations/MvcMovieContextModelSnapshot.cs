@@ -26,14 +26,14 @@ namespace MVCMovie.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int?>("BasedOnGameMovieId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
                     b.Property<bool>("CrossPlatformMultiplayer")
                         .HasColumnType("bit");
-
-                    b.Property<int>("MovieID")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -51,7 +51,7 @@ namespace MVCMovie.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieID");
+                    b.HasIndex("BasedOnGameMovieId");
 
                     b.ToTable("Game");
                 });
@@ -68,16 +68,13 @@ namespace MVCMovie.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Rating")
                         .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
-
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -93,9 +90,7 @@ namespace MVCMovie.Migrations
                 {
                     b.HasOne("MvcMovie.Models.Movie", "BasedOnGameMovie")
                         .WithMany()
-                        .HasForeignKey("MovieID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BasedOnGameMovieId");
 
                     b.Navigation("BasedOnGameMovie");
                 });
