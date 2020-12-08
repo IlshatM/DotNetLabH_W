@@ -22,13 +22,13 @@ namespace CalcExpProxy
             var serviceProvider = ServiceProvider();
             var calculator = serviceProvider.GetService<ICalculatorAsync>();    
             Solver solver = new Solver(calculator);
-            Console.WriteLine(await solver.SolveAsync("(2+3)/12*7+8*9"));
+            Console.WriteLine(await solver.SolveAsync("315/(162+12*24-11*39)+558/31"));
         }
 
         public static ServiceProvider ServiceProvider()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<ICalculatorAsync, CalculatorInServer>();
+            services.AddSingleton<ICalculatorAsync, CalculatorInApp>();
             var serviceProvider = services.BuildServiceProvider();
             return serviceProvider;
         }
