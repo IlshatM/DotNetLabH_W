@@ -17,12 +17,12 @@ namespace CalcExpProxy
         {
             CalculatorAsync = calculatorAsync;
         }
-        public MyTree CreateTree(Expression expression)
+        public MyTree CreateTree(Expression expression, MyVisitor myVisitor)
         {
-            TreeCompilator treeCompilator = new TreeCompilator();
-            treeCompilator.root=new MyTree(expression);
-            MyTree toReturn = treeCompilator.root;
-            treeCompilator.Visit(expression);
+
+            myVisitor.root=new MyTree(expression);
+            MyTree toReturn = myVisitor.root;
+            myVisitor.Visit(expression);
             return toReturn;
         }
 
@@ -38,7 +38,7 @@ namespace CalcExpProxy
         {
             MyVisitor mv = new MyVisitor();
             var input = Expression.Constant(expression, typeof(string));
-            var tree = CreateTree(mv.Visit(input));
+            var tree = CreateTree(mv.Visit(input), mv);
             await ProcessInParallelAsync(tree);
             Console.WriteLine(tree.displayNode());
             return (double) tree.Value;

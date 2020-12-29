@@ -5,9 +5,9 @@ using System.Text;
 
 namespace CalcExpProxy
 {
-    class MyVisitor : ExpressionVisitor
+    public class MyVisitor : MyExpressionVisitor
     {
-        protected override Expression VisitConstant(ConstantExpression node)
+        public override Expression RealVisit(ConstantExpression node)
         {
             if (node.Type == typeof(string))
             {
@@ -60,6 +60,29 @@ namespace CalcExpProxy
             }
             return node;
         }
+        public MyTree root;
+        public override Expression RealVisit(BinaryExpression node)
+        {
+            var temp = root;
+            if (node.Left != null)
+            {
+                root.Left = new MyTree(node.Left);
+                root = root.Left;
+                Visit(node.Left);
+            }
+            root = temp;
+            if (node.Right != null)
+            {
+                
+                root.Right = new MyTree(node.Right);
+                root = root.Right;
+                Visit(node.Right);
+                
+            }
+
+            return node;
+        }
+
         public static bool ContainsOutSide(string expr, char r)
         {
             bool inside = false;
